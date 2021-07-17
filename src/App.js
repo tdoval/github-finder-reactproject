@@ -1,4 +1,4 @@
-import React, {useState, Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Navbar from './components/layout/Navbar'
 import Users from './components/users/Users';
@@ -10,26 +10,25 @@ import axios from 'axios';
 import './App.css';
 
 const App = () => {
+
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
 
-
-
   //Search GitHub users
-  const searchUsers = async text => {
+ const searchUsers = async text => {
     setLoading(true);
 
     const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
 
-    setUser(res.data.items);
+    setUsers(res.data.items);
     setLoading(false);
-  }
+  };
 
   // Get single Github user
- const getUser = async (username) => {
+  const  getUser = async (username) => {
 
     setLoading(true);
 
@@ -37,8 +36,7 @@ const App = () => {
 
     setUser(res.data);
     setLoading(false);
-
-  }
+  };
 
   // Get user repos
   const getUserRepos = async (username) => {
@@ -49,20 +47,20 @@ const App = () => {
     setRepos(res.data);
     setLoading(false);
 
-  }
+  };
 
   // Clear users from state
   const clearUsers = () => {
-    setLoading(false);
     setUsers([]);
-  }
+    setLoading(false);
+  };
 
-  // Set Alert
+  // Show Alert
   const showAlert = (msg, type) => {
-    setAlert({msg, type});
+    setAlert({msg, type})
 
     setTimeout(() => setAlert(null), 5000)
-  }
+  };
 
     return (
       <Router>
